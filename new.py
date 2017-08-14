@@ -101,15 +101,17 @@ for msg in spam_training_set:
 for msg in ham_training_set:
 	if msg not in spam_training_set:
 		spam_training_set[msg]=0.0000000002
-test()
+#test() //uncomment to test this on given dataset
 test_string=raw_input("enter a message:- ")
 test_tokens=get_token(test_string)
 probS=0
 probH=0
-for msg in range(0,len(test_tokens)):
+for msg in test_tokens:
     if msg in spam_training_set:
         probS=probS+spam_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
         probH=probH+ham_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
+print probS
+print probH
 if probS>probH:
     print "spam"
 else:
