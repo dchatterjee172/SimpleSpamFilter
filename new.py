@@ -7,7 +7,7 @@ from os.path import isfile,join
 nltk.data.path = ['nltk_data']
 stopwords = set(stopwords.words('english'))
 spam_path = 'spam/'
-ham_path = 'easy_ham/'
+ham_path = 'ham/'
 english_words=set()
 def get_mail(file_name):
     message = ''
@@ -39,19 +39,19 @@ def get_token(message):
     msg_words = [word for word in all_words if word not in stopwords and len(word) > 2 and word in english_words]
     return msg_words
 def make_training_set(path):
-    training_set = {}
-    mails_in_dir = [mail_file for mail_file in listdir(path) if isfile(join(path, mail_file))]
-    total_file_count = len(mails_in_dir)
+    training_set={}
+    mails_in_dir=[mail_file for mail_file in listdir(path) if isfile(join(path, mail_file))]
+    total_file_count=len(mails_in_dir)
     for mail_name in mails_in_dir:
         message = get_mail(path + mail_name)
         terms = get_token(message)
         for term in terms:
             if term in training_set:
-                training_set[term] = training_set[term] + 1
+                training_set[term]=training_set[term] + 1
             else:
-                training_set[term] = 1
+                training_set[term]=1
     for term in training_set.keys():
-        training_set[term] = float(training_set[term]) / total_file_count
+        training_set[term] = float(training_set[term])/total_file_count
     return training_set
 def test():
     spam_mails_in_dir = [mail_file for mail_file in listdir(spam_path) if isfile(join(spam_path, mail_file))]
@@ -60,8 +60,8 @@ def test():
     total_file_countH = len(ham_mails_in_dir)
     correct=0
     for mail_name in spam_mails_in_dir:
-        message = get_mail(spam_path + mail_name)
-        term = get_token(message)
+        message=get_mail(spam_path + mail_name)
+        term=get_token(message)
         probS=0
         probH=0
         for msg in term:
@@ -102,3 +102,15 @@ for msg in ham_training_set:
 	if msg not in spam_training_set:
 		spam_training_set[msg]=0.0000000002
 test()
+test_string=raw_input("enter a message:- ")
+test_tokens=get_token(test_string)
+probS=0
+probH=0
+for msg in range(0,len(test_tokens)):
+    if msg in spam_training_set:
+        probS=probS+spam_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
+        probH=probH+ham_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
+if probS>probH:
+    print "spam"
+else:
+    print "ham"
