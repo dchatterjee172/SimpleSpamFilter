@@ -70,7 +70,7 @@ def test():
                 probH=probH+ham_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
         if probS>probH:
             correct=correct+1
-    print str(correct)+" "+str(total_file_countS)
+    print "correctly classified: "+str(correct)+" total: "+str(total_file_countS)
     print float(correct)/total_file_countS*100
     correct=0
     for mail_name in ham_mails_in_dir:
@@ -85,7 +85,7 @@ def test():
         if probS<probH:
             correct=correct+1
     print
-    print str(correct)+" "+str(total_file_countH)
+    print "correctly classified: "+str(correct)+" total: "+str(total_file_countH)
     print float(correct)/total_file_countH*100
 
 
@@ -101,17 +101,18 @@ for msg in spam_training_set:
 for msg in ham_training_set:
 	if msg not in spam_training_set:
 		spam_training_set[msg]=0.0000000002
-#test() //uncomment to test this on given dataset
+test() #uncomment to test this on given dataset
 test_string=raw_input("enter a message:- ")
 test_tokens=get_token(test_string)
 probS=0
 probH=0
 for msg in test_tokens:
     if msg in spam_training_set:
+        print msg+" spam "+str(spam_training_set[msg])+" ham "+str(ham_training_set[msg])
         probS=probS+spam_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
         probH=probH+ham_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
-print probS
-print probH
+print "spam confidence:- "+str(probS/(probS+probH)*100)
+print "ham confidence:- "+str(probH/(probS+probH)*100)
 if probS>probH:
     print "spam"
 else:
