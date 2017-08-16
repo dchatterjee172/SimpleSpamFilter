@@ -1,2 +1,2 @@
-##**This is a simple spam filter.**
+## **This is a simple spam filter.**
 Use python3.
