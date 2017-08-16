@@ -11,11 +11,14 @@ ham_path = 'ham/'
 english_words=set()
 def get_mail(file_name):
     message = ''
-    with open(file_name, 'r') as mail_file:
-        for line in mail_file:
-            #if line == '\n':
-                #for line in mail_file:
-                    message += line
+    try:
+        with open(file_name, 'r') as mail_file:
+            for line in mail_file:
+                message += line
+    except UnicodeDecodeError as e:
+        with open(file_name, 'r',encoding="latin-1") as mail_file:
+            for line in mail_file:
+                message += line
     return message
 
 def get_token(message):
@@ -70,8 +73,8 @@ def test():
                 probH=probH+ham_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
         if probS>probH:
             correct=correct+1
-    print "correctly classified: "+str(correct)+" total: "+str(total_file_countS)
-    print float(correct)/total_file_countS*100
+    print("correctly classified: "+str(correct)+" total: "+str(total_file_countS))
+    print(float(correct)/total_file_countS*100)
     correct=0
     for mail_name in ham_mails_in_dir:
         message = get_mail(ham_path + mail_name)
@@ -84,17 +87,17 @@ def test():
                 probH=probH+ham_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
         if probS<probH:
             correct=correct+1
-    print
-    print "correctly classified: "+str(correct)+" total: "+str(total_file_countH)
-    print float(correct)/total_file_countH*100
+    print('')
+    print("correctly classified: "+str(correct)+" total: "+str(total_file_countH))
+    print(float(correct)/total_file_countH*100)
 
 
 with open("wordsEn.txt") as word_file:
         english_words = set(word.strip().lower() for word in word_file)
 spam_training_set = make_training_set(spam_path)
-print "spam done"
+print ("spam done")
 ham_training_set = make_training_set(ham_path)
-print "ham done"
+print ("ham done")
 for msg in spam_training_set:
 	if msg not in ham_training_set:
 		ham_training_set[msg]=0.00000000001
@@ -102,18 +105,21 @@ for msg in ham_training_set:
 	if msg not in spam_training_set:
 		spam_training_set[msg]=0.0000000002
 test() #uncomment to test this on given dataset
-test_string=raw_input("enter a message:- ")
+test_string=input("enter a message:- ")
 test_tokens=get_token(test_string)
 probS=0
 probH=0
 for msg in test_tokens:
     if msg in spam_training_set:
-        print msg+" spam "+str(spam_training_set[msg])+" ham "+str(ham_training_set[msg])
+        print (msg+" spam- "+str(spam_training_set[msg])+" ham- "+str(ham_training_set[msg]))
+        print
         probS=probS+spam_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
         probH=probH+ham_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
-print "spam confidence:- "+str(probS/(probS+probH)*100)
-print "ham confidence:- "+str(probH/(probS+probH)*100)
+print ("spam confidence:- "+str(probS/(probS+probH+0.000001)*100))
+print ("ham confidence:- "+str(probH/(probS+probH+0.000001)*100))
 if probS>probH:
-    print "spam"
+    print ("spam")
+elif probS<probH:
+    print ("ham")
 else:
-    print "ham"
+    print("Can be spam")
