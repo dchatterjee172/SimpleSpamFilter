@@ -70,11 +70,11 @@ def test():
         p=zeros(shape=(len(term),))
         l,j=1,1
         for i in range(0,len(term)):
-            p[i]=(spam_training_set[term[i]])/(spam_training_set[term[i]]+ham_training_set[term[i]])
+            p[i]=(spam_training_set[term[i]])/(spam_training_set[term[i]]+ham_training_set[term[i]])*2
             l*=p[i]
-            j*=(1-p[i])
+            j*=(2-p[i])
         probS=l/(l+j)
-        if probS>.75:
+        if probS>.8:
             correct=correct+1
     print("correctly classified: "+str(correct)+" total: "+str(total_file_countS))
     print(float(correct)/total_file_countS*100)
@@ -86,11 +86,11 @@ def test():
         p=zeros(shape=(len(term),))
         l,j=1,1
         for i in range(0,len(term)):
-            p[i]=(spam_training_set[term[i]])/(spam_training_set[term[i]]+ham_training_set[term[i]])
+            p[i]=(spam_training_set[term[i]])/(spam_training_set[term[i]]+ham_training_set[term[i]])*2
             l*=p[i]
-            j*=(1-p[i])
+            j*=(2-p[i])
         probS=l/(l+j)
-        if probS<.75:
+        if probS<.8:
             correct=correct+1
     print('')
     print("correctly classified: "+str(correct)+" total: "+str(total_file_countH))
@@ -114,12 +114,12 @@ probS=0
 p=zeros(shape=(len(term),))
 l,j=1,1
 for i in range(0,len(term)):
-    p[i]=(spam_training_set[term[i]])/(spam_training_set[term[i]]+ham_training_set[term[i]])
+    p[i]=(spam_training_set[term[i]])/(spam_training_set[term[i]]+ham_training_set[term[i]])*2
     l*=p[i]
-    j*=(1-p[i])
+    j*=(2-p[i])
 probS=l/(l+j)
 print(probS)
-if probS>.75:
+if probS>.8:
     print ("spam")
 else:
     print("ham")
