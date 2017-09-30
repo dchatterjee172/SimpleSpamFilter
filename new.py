@@ -90,42 +90,36 @@ def test():
             l*=p[i]
             j*=(1-p[i])
         probS=l/(l+j)
-        print(probS)
         if probS<.75:
             correct=correct+1
     print('')
     print("correctly classified: "+str(correct)+" total: "+str(total_file_countH))
     print(float(correct)/total_file_countH*100)
-
-
 with open("wordsEn.txt") as word_file:
-        english_words = set(word.strip().lower() for word in word_file)
+    english_words = set(word.strip().lower() for word in word_file)
 spam_training_set = make_training_set(spam_path)
 print ("spam done")
 ham_training_set = make_training_set(ham_path)
 print ("ham done")
 for msg in spam_training_set:
-	if msg not in ham_training_set:
-		ham_training_set[msg]=0.00000001
+    if msg not in ham_training_set:
+	    ham_training_set[msg]=0.00000001
 for msg in ham_training_set:
-	if msg not in spam_training_set:
-		spam_training_set[msg]=0.0000002
+    if msg not in spam_training_set:
+    	spam_training_set[msg]=0.0000002
 test() #uncomment to test this on given dataset
 test_string=input("enter a message:- ")
-test_tokens=get_token(test_string)
+term=get_token(test_string)
 probS=0
-probH=0
-for msg in test_tokens:
-    if msg in spam_training_set:
-        print (msg+" spam- "+str(spam_training_set[msg])+" ham- "+str(ham_training_set[msg]))
-        print
-        probS=probS+spam_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
-        probH=probH+ham_training_set[msg]/(spam_training_set[msg]+ham_training_set[msg])
-print ("spam confidence:- "+str(probS/(probS+probH+0.000001)*100))
-print ("ham confidence:- "+str(probH/(probS+probH+0.000001)*100))
-if probS>probH:
+p=zeros(shape=(len(term),))
+l,j=1,1
+for i in range(0,len(term)):
+    p[i]=(spam_training_set[term[i]])/(spam_training_set[term[i]]+ham_training_set[term[i]])
+    l*=p[i]
+    j*=(1-p[i])
+probS=l/(l+j)
+print(probS)
+if probS>.75:
     print ("spam")
-elif probS<probH:
-    print ("ham")
 else:
-    print("Can be spam")
+    print("ham")
